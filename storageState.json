@@ -8,7 +8,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "_gcl_au",
@@ -18,7 +18,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_anonymous_id",
@@ -28,7 +28,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_page_init_referrer",
@@ -38,7 +38,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_page_init_referring_domain",
@@ -48,7 +48,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "_fprom_ref",
@@ -58,7 +58,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "_fprom_tid",
@@ -68,7 +68,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_user_id",
@@ -78,7 +78,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "intercom-device-id-siifiun4",
@@ -88,7 +88,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_trait",
@@ -98,7 +98,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "_ga_FZG9BNPQXK",
@@ -108,7 +108,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "rl_session",
@@ -118,7 +118,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "intercom-session-siifiun4",
@@ -128,7 +128,7 @@
       "expires": -1,
       "httpOnly": false,
       "secure": false,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     },
     {
       "name": "ph_phc_NT2sOH8m82boUw21Q1Vsr0tQUtjpRJUIE5aoqA0En8T_posthog",
@@ -138,8 +138,9 @@
       "expires": -1,
       "httpOnly": false,
       "secure": true,
-      "sameSite": "lax"
+      "sameSite": "Lax"
     }
   ],
   "origins": []
+
 }
