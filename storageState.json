@@ -1,0 +1,145 @@
+{
+  "cookies": [
+    {
+      "name": "_ga",
+      "value": "GA1.1.749148069.1760544443",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "_gcl_au",
+      "value": "1.1.254791839.1760544443",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_anonymous_id",
+      "value": "RS_ENC_v3_IjJhZThkY2ZmLWQyMGEtNDY3My04YzU2LTllYTA4YjM1ZDg3NiI%3D",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_page_init_referrer",
+      "value": "RS_ENC_v3_Imh0dHBzOi8vd3d3LnlvdXR1YmUuY29tLyI%3D",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_page_init_referring_domain",
+      "value": "RS_ENC_v3_Ind3dy55b3V0dWJlLmNvbSI%3D",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "_fprom_ref",
+      "value": "skai",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "_fprom_tid",
+      "value": "c55c618f-9930-4703-aa6c-10cff3daa86e",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_user_id",
+      "value": "RS_ENC_v3_InZaQWQ1TWNtaXFnOXlSa0lDejZJNWkxT0Z5VzIi",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "intercom-device-id-siifiun4",
+      "value": "1e4fa3bc-e141-4e48-8ef4-d3f240d9d49d",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_trait",
+      "value": "RS_ENC_v3_eyJlbWFpbCI6ImxpdmVnb29kZm9yZXZlcjI4QGdtYWlsLmNvbSIsIm5hbWUiOiJEcmlzcyBFbCBBeWFjaGkiLCJmaXJzdE5hbWUiOiJEcmlzcyIsImxhc3ROYW1lIjoiRWwgQXlhY2hpIiwicGxhbiI6InBybyIsImNyZWRpdHMiOjMyMDB9",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "_ga_FZG9BNPQXK",
+      "value": "GS2.1.s1761506209$o40$g1$t1761506216$j53$l0$h0",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "rl_session",
+      "value": "RS_ENC_v3_eyJpZCI6MTc2MTUwNjIxNjE5NywiZXhwaXJlc0F0IjoxNzYxNTA4MDMwMzk2LCJ0aW1lb3V0IjoxODAwMDAwLCJhdXRvVHJhY2siOnRydWUsInNlc3Npb25TdGFydCI6dHJ1ZX0%3D",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "intercom-session-siifiun4",
+      "value": "NXVqZE9VZmhXMmo1eXNkMEowMlJpKzN4cUlrWU1ZTlFKYXl1cFcyMzFoMWFVR1ZyMFZKSDU1Rzl1NGM0VU81S0Q5dXpHcXB0MHozc3JLVS9WT2o3YnV3QU5rWHlrZmRQYUlxdFdTTWNUb3c9LS1MMzQ4UUt5cE12cXd0QVY3dldwNUVnPT0=--1ed6b051ef5330eca89a5f2b46a2fe9a0419acc8",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "lax"
+    },
+    {
+      "name": "ph_phc_NT2sOH8m82boUw21Q1Vsr0tQUtjpRJUIE5aoqA0En8T_posthog",
+      "value": "%7B%22distinct_id%22%3A%22vZAd5Mcmiqg9yRkICz6I5i1OFyW2%22%2C%22%24sesid%22%3A%5B1761507285490%2C%22019a21f3-c63e-7916-a1ff-ad6c269cee0c%22%2C1761506215486%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22https%3A%2F%2Fwww.youtube.com%2F%22%2C%22u%22%3A%22https%3A%2F%2Fapp.weavy.ai%2Fflow%2FFI6szmirwSVsTgYmALBxaN%3Fref%3Dskai%22%7D%7D",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "lax"
+    }
+  ],
+  "origins": []
+}
