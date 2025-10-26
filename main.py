@@ -72,12 +72,50 @@ async def automate_weavy(request: WeavyRequest):
             
             print("📧 Filling email...")
             await popup.wait_for_load_state("domcontentloaded")
-            await popup.fill("input[type=email]", request.weavy_email)
+            await asyncio.sleep(2)
+            
+            # Email Feld finden und füllen
+            email_input = await popup.wait_for_selector("input[type=email]", timeout=30000)
+            await email_input.fill(request.weavy_email)
+            print(f"Email entered: {request.weavy_email}")
+            await asyncio.sleep(1)
+            
+            # Next Button klicken
+            print("Clicking Next button...")
             await popup.click("#identifierNext")
+            await asyncio.sleep(5)  # Länger warten für Google's Response
+            
+            print("🔑 Waiting for password field...")
+            # Screenshot für Debugging (optional)
+            try:
+                await popup.screenshot(path="/tmp/before-password.png")
+                print("Screenshot saved for debugging")
+            except:
+                pass
             
             print("🔑 Filling password...")
-            await popup.wait_for_selector("input[type=password]", timeout=120000)
-            await popup.fill("input[type=password]", request.weavy_password)
+            
+            # Warte auf verschiedene mögliche Screens
+            print("Checking what page we're on...")
+            page_content = await popup.content()
+            
+            # Check für 2FA/Verification
+            if "verify" in page_content.lower() or "authentication" in page_content.lower():
+                raise Exception("2FA/Verification detected! Please disable 2FA on this account or use an app-specific password.")
+            
+            # Check für CAPTCHA
+            if "captcha" in page_content.lower() or "recaptcha" in page_content.lower():
+                raise Exception("CAPTCHA detected! Browserless may be blocked by Google. Try using a different IP or authentication method.")
+            
+            # Check für "wrong email"
+            if "couldn't find your google account" in page_content.lower() or "couldn't sign you in" in page_content.lower():
+                raise Exception(f"Google account not found or email incorrect: {request.weavy_email}")
+            
+            # Versuche Password-Feld zu finden
+            password_input = await popup.wait_for_selector("input[type=password]", timeout=120000)
+            await password_input.fill(request.weavy_password)
+            print("Password entered")
+            await asyncio.sleep(1)
             await popup.click("#passwordNext")
             await popup.wait_for_event("close", timeout=180000)
             
