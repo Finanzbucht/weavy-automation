@@ -102,17 +102,7 @@
     },
     {
       "name": "_ga_FZG9BNPQXK",
-      "value": "GS2.1.s1761513380$o41$g1$t1761513382$j58$l0$h0",
-      "domain": "weavy.ai",
-      "path": "/",
-      "expires": -1,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "intercom-session-siifiun4",
-      "value": "UUJETkd6Vi9Ud2g4M2xlU015Y0JPZ2ZIbDduNFZMbVQvM0FtMnpJbEhqM2VBL1Z2QWwyQi9OaGJqbFJJQmtYS2lmaDRFakNYM3ZBOWRVNFhpUlJnQmtEUEw3ZlpPY3FzU1RhV04vU3BUSmc9LS14VVBVMHNSU2xQTG5xOTVIdm1sT0R3PT0=--0219923e35482fd73238f3b9d00ad7b045ac6d34",
+      "value": "GS2.1.s1761513380$o41$g1$t1761514332$j27$l0$h0",
       "domain": "weavy.ai",
       "path": "/",
       "expires": -1,
@@ -122,7 +112,7 @@
     },
     {
       "name": "rl_session",
-      "value": "RS_ENC_v3_eyJpZCI6MTc2MTUxMzM4MDQzNCwiZXhwaXJlc0F0IjoxNzYxNTE1MTk1MzkwLCJ0aW1lb3V0IjoxODAwMDAwLCJhdXRvVHJhY2siOnRydWUsInNlc3Npb25TdGFydCI6ZmFsc2V9",
+      "value": "RS_ENC_v3_eyJhdXRvVHJhY2siOnRydWUsInRpbWVvdXQiOjE4MDAwMDAsImV4cGlyZXNBdCI6MTc2MTUxNjEzMzE4OCwiaWQiOjE3NjE1MTMzODA0MzQsInNlc3Npb25TdGFydCI6ZmFsc2V9",
       "domain": "weavy.ai",
       "path": "/",
       "expires": -1,
@@ -132,12 +122,22 @@
     },
     {
       "name": "ph_phc_NT2sOH8m82boUw21Q1Vsr0tQUtjpRJUIE5aoqA0En8T_posthog",
-      "value": "%7B%22distinct_id%22%3A%22vZAd5Mcmiqg9yRkICz6I5i1OFyW2%22%2C%22%24sesid%22%3A%5B1761513400088%2C%22019a2261-18eb-71eb-9131-057ad86e3f01%22%2C1761513380075%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22https%3A%2F%2Fwww.youtube.com%2F%22%2C%22u%22%3A%22https%3A%2F%2Fapp.weavy.ai%2Fflow%2FFI6szmirwSVsTgYmALBxaN%3Fref%3Dskai%22%7D%7D",
+      "value": "%7B%22distinct_id%22%3A%22vZAd5Mcmiqg9yRkICz6I5i1OFyW2%22%2C%22%24sesid%22%3A%5B1761514333364%2C%22019a2261-18eb-71eb-9131-057ad86e3f01%22%2C1761513380075%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22https%3A%2F%2Fwww.youtube.com%2F%22%2C%22u%22%3A%22https%3A%2F%2Fapp.weavy.ai%2Fflow%2FFI6szmirwSVsTgYmALBxaN%3Fref%3Dskai%22%7D%7D",
       "domain": "weavy.ai",
       "path": "/",
       "expires": -1,
       "httpOnly": false,
       "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "intercom-session-siifiun4",
+      "value": "a04wOWVOWk9PakwyRDRWVGRjZ1Fab0tMREN5WmZqTGlWOVNLRFdkNDJvdE5rMjZVREN3d2pHUEd6L3l1am85TGFmeVN1TG1RL0pFbE9CdFJCR0hwRVY3OHBVdzljSERpYU42WFp5cjVhMkk9LS0za2Z2b2NUZXZRQUh2ZzlRcTJNaW9BPT0=--e1563c5808724aeef59a0dec32f2818ecc027932",
+      "domain": "weavy.ai",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false,
       "sameSite": "Lax"
     }
   ],
