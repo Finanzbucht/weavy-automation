@@ -3,9 +3,11 @@ from pydantic import BaseModel
 from playwright.async_api import async_playwright
 import asyncio
 import base64
+import os
+import json
 from typing import List
 
-app = FastAPI(title="Weavy Automation (Local Browser - No Browserless)")
+app = FastAPI(title="Weavy Automation with StorageState (No Login!)")
 
 class ClipData(BaseModel):
     index: int
@@ -16,116 +18,54 @@ class WeavyRequest(BaseModel):
     nanoClips: List[ClipData]
     seedClips: List[ClipData]
     workflowName: str
-    weavy_email: str
-    weavy_password: str
 
 @app.post("/automate")
 async def automate_weavy(request: WeavyRequest):
     """
-    Automates Weavy workflow using LOCAL browser (no Browserless needed)
-    This avoids Google CAPTCHA issues!
+    Automates Weavy workflow using saved storageState
+    NO LOGIN NEEDED - uses pre-authenticated session!
     """
     try:
+        # Check if storageState exists
+        storage_state_path = "/app/storageState.json"
+        if not os.path.exists(storage_state_path):
+            raise Exception("storageState.json not found! Please upload it to Railway.")
+        
+        print("📋 Loading storageState...")
+        with open(storage_state_path, 'r') as f:
+            storage_state = json.load(f)
+        
         async with async_playwright() as p:
-            print("🚀 Launching local browser (avoiding CAPTCHA)...")
+            print("🚀 Launching browser with saved session...")
             browser = await p.chromium.launch(
                 headless=True,
                 args=[
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-blink-features=AutomationControlled',
-                    '--disable-web-security'
+                    '--disable-dev-shm-usage'
                 ]
             )
             
-            # Set user agent to look like real browser
-            context = await browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-            )
+            # Use saved storage state - NO LOGIN NEEDED!
+            context = await browser.new_context(storage_state=storage_state)
             page = await context.new_page()
             
-            print("🌐 Opening Weavy...")
-            await page.goto("https://app.weavy.ai/signin", timeout=60000)
+            print("🌐 Opening Weavy (already logged in!)...")
+            await page.goto("https://app.weavy.ai", timeout=60000)
             await page.wait_for_load_state("domcontentloaded")
             await asyncio.sleep(3)
             
-            print("🔐 Looking for Google Sign-in button...")
-            # Try multiple selectors for Google button
-            google_btn = None
-            selectors = [
-                'button:has-text("Google")',
-                'button[aria-label*="Google"]',
-                'button:has-text("google")',
-                'button:has(path[d*="M22.56"])',  # Google icon SVG
-                'button[class*="google"]',
-                'a:has-text("Google")'
-            ]
+            # Check if we're really logged in
+            current_url = page.url
+            if "signin" in current_url:
+                raise Exception("Session expired! Please create a new storageState.json")
             
-            for selector in selectors:
-                try:
-                    google_btn = await page.wait_for_selector(selector, timeout=5000)
-                    if google_btn:
-                        print(f"✅ Found Google button with: {selector}")
-                        break
-                except:
-                    continue
-            
-            if not google_btn:
-                await page.screenshot(path="/tmp/signin-page.png")
-                raise Exception("Google Sign-in button not found. Screenshot saved.")
-            
-            print("👆 Clicking Google button...")
-            async with page.expect_popup(timeout=60000) as popup_info:
-                await google_btn.click()
-            popup = await popup_info.value
-            
-            print("📧 Filling email...")
-            await popup.wait_for_load_state("domcontentloaded")
-            await asyncio.sleep(2)
-            
-            email_input = await popup.wait_for_selector("input[type=email]", timeout=30000)
-            await email_input.fill(request.weavy_email)
-            print(f"✅ Email entered: {request.weavy_email}")
-            await asyncio.sleep(1)
-            
-            print("👉 Clicking Next...")
-            await popup.click("#identifierNext")
-            await asyncio.sleep(5)
-            
-            print("🔑 Waiting for password field...")
-            # Check what page we're on
-            page_content = await popup.content()
-            
-            if "verify" in page_content.lower() or "authentication" in page_content.lower():
-                await popup.screenshot(path="/tmp/2fa-screen.png")
-                raise Exception("2FA/Verification detected! Please disable 2FA or use app-specific password.")
-            
-            if "captcha" in page_content.lower() or "recaptcha" in page_content.lower():
-                await popup.screenshot(path="/tmp/captcha-screen.png")
-                raise Exception("CAPTCHA detected! This should not happen with local browser. Check Railway logs.")
-            
-            if "couldn't find" in page_content.lower():
-                raise Exception(f"Google account not found: {request.weavy_email}")
-            
-            # Wait for password field
-            password_input = await popup.wait_for_selector("input[type=password]", timeout=120000)
-            await password_input.fill(request.weavy_password)
-            print("✅ Password entered")
-            await asyncio.sleep(1)
-            
-            print("👉 Clicking Next (password)...")
-            await popup.click("#passwordNext")
-            await popup.wait_for_event("close", timeout=180000)
-            
-            print("✅ Login successful!")
-            await asyncio.sleep(5)
+            print("✅ Already logged in! Skipping authentication.")
             
             print(f"🔍 Looking for workflow: {request.workflowName}")
-            await page.wait_for_load_state("domcontentloaded")
-            await asyncio.sleep(3)
+            await asyncio.sleep(2)
             
-            # Find workflow with multiple strategies
+            # Find workflow
             workflow_found = False
             selectors = [
                 f'text="{request.workflowName}"',
@@ -141,7 +81,7 @@ async def automate_weavy(request: WeavyRequest):
                     await page.wait_for_selector(selector, timeout=10000)
                     await page.click(selector)
                     workflow_found = True
-                    print(f"✅ Workflow clicked with: {selector}")
+                    print(f"✅ Workflow clicked: {selector}")
                     break
                 except:
                     continue
@@ -220,7 +160,7 @@ async def automate_weavy(request: WeavyRequest):
                 "success": True,
                 "fileName": file_name,
                 "base64": video_base64,
-                "message": "Automation completed successfully"
+                "message": "Automation completed successfully (with storageState)"
             }
             
     except Exception as e:
@@ -231,11 +171,13 @@ async def automate_weavy(request: WeavyRequest):
 
 @app.get("/")
 async def root():
+    storage_exists = os.path.exists("/app/storageState.json")
     return {
-        "service": "Weavy Automation (Local Browser - No Browserless)",
-        "status": "ready",
+        "service": "Weavy Automation with StorageState",
+        "status": "ready" if storage_exists else "waiting for storageState.json",
         "endpoint": "/automate",
-        "note": "Uses local browser to avoid CAPTCHA issues"
+        "storageState": "loaded" if storage_exists else "missing",
+        "note": "No login needed - uses saved session!"
     }
 
 @app.get("/health")
