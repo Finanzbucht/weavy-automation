@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/playwright/python:v1.48.0-jammy
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
-COPY requirements.txt .
+COPY storageState.json .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application
