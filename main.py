@@ -35,12 +35,39 @@ async def automate_weavy(request: WeavyRequest):
             page = await context.new_page()
             
             print("🌐 Opening Weavy...")
-            await page.goto("https://app.weavy.ai/signin")
-            await asyncio.sleep(2)
+            await page.goto("https://app.weavy.ai/signin", timeout=60000)
+            await page.wait_for_load_state("domcontentloaded")
+            await asyncio.sleep(3)
             
             print("🔐 Clicking Google Sign-in...")
-            async with page.expect_popup() as popup_info:
-                await page.click("text=Sign in with Google")
+            # Warte bis Seite geladen
+            await page.wait_for_load_state("networkidle")
+            await asyncio.sleep(2)
+            
+            # Finde Google Button (mehrere Selektoren probieren)
+            google_btn = None
+            selectors = [
+                'button:has-text("Google")',
+                'button[aria-label*="Google"]',
+                'button:has(svg) >> text=/google/i',
+                'button:has(.google-icon)',
+                'button >> text=/^Google$/i'
+            ]
+            
+            for selector in selectors:
+                try:
+                    google_btn = await page.wait_for_selector(selector, timeout=5000)
+                    if google_btn:
+                        print(f"Found Google button with selector: {selector}")
+                        break
+                except:
+                    continue
+            
+            if not google_btn:
+                raise Exception("Google Sign-in button not found")
+            
+            async with page.expect_popup(timeout=60000) as popup_info:
+                await google_btn.click()
             popup = await popup_info.value
             
             print("📧 Filling email...")
@@ -58,8 +85,33 @@ async def automate_weavy(request: WeavyRequest):
             await asyncio.sleep(5)
             
             print(f"🔍 Looking for workflow: {request.workflowName}")
-            await page.wait_for_selector(f"text={request.workflowName}", timeout=120000)
-            await page.click(f"text={request.workflowName}")
+            await page.wait_for_load_state("domcontentloaded")
+            await asyncio.sleep(3)
+            
+            # Suche Workflow mit mehreren Strategien
+            workflow_found = False
+            selectors = [
+                f'text="{request.workflowName}"',
+                f'text={request.workflowName}',
+                f'[title="{request.workflowName}"]',
+                f'button:has-text("{request.workflowName}")',
+                f'a:has-text("{request.workflowName}")'
+            ]
+            
+            for selector in selectors:
+                try:
+                    await page.wait_for_selector(selector, timeout=10000)
+                    await page.click(selector)
+                    workflow_found = True
+                    print(f"Workflow found with selector: {selector}")
+                    break
+                except:
+                    continue
+            
+            if not workflow_found:
+                raise Exception(f"Workflow '{request.workflowName}' not found")
+            
+            await page.wait_for_load_state("domcontentloaded")
             await asyncio.sleep(5)
             
             print("🎨 Filling NANO prompts...")
