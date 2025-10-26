@@ -5,7 +5,7 @@ import asyncio
 import base64
 from typing import List, Dict
 
-app = FastAPI(title="Weavy Automation Service (WITH Browserless)")
+app = FastAPI(title="Weavy Automation Service (WITHOUT Browserless)")
 
 class ClipData(BaseModel):
     index: int
@@ -22,100 +22,42 @@ class WeavyRequest(BaseModel):
 @app.post("/automate")
 async def automate_weavy(request: WeavyRequest):
     """
-    Automates Weavy workflow using Browserless WebSocket
+    Automates Weavy workflow using LOCAL Playwright browser (no Browserless)
     """
     try:
         async with async_playwright() as p:
-            print("🔗 Connecting to Browserless...")
-            browser = await p.chromium.connect(
-                ws_endpoint="wss://production-sfo.browserless.io/chromium/playwright?token=2TIL1C6Yxk0ZmEM72ed69a2147ef229b4d58eb97a57439b1c"
+            print("🚀 Launching local browser...")
+            browser = await p.chromium.launch(
+                headless=True,
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--disable-gpu'
+                ]
             )
             
             context = await browser.new_context()
             page = await context.new_page()
             
             print("🌐 Opening Weavy...")
-            await page.goto("https://app.weavy.ai/signin", timeout=60000)
-            await page.wait_for_load_state("domcontentloaded")
-            await asyncio.sleep(3)
-            
-            print("🔐 Clicking Google Sign-in...")
-            # Warte bis Seite geladen
-            await page.wait_for_load_state("networkidle")
+            await page.goto("https://app.weavy.ai/signin")
             await asyncio.sleep(2)
             
-            # Finde Google Button (mehrere Selektoren probieren)
-            google_btn = None
-            selectors = [
-                'button:has-text("Google")',
-                'button[aria-label*="Google"]',
-                'button:has(svg) >> text=/google/i',
-                'button:has(.google-icon)',
-                'button >> text=/^Google$/i'
-            ]
-            
-            for selector in selectors:
-                try:
-                    google_btn = await page.wait_for_selector(selector, timeout=5000)
-                    if google_btn:
-                        print(f"Found Google button with selector: {selector}")
-                        break
-                except:
-                    continue
-            
-            if not google_btn:
-                raise Exception("Google Sign-in button not found")
-            
-            async with page.expect_popup(timeout=60000) as popup_info:
-                await google_btn.click()
+            print("🔐 Clicking Google Sign-in...")
+            async with page.expect_popup() as popup_info:
+                await page.click("text=Sign in with Google")
             popup = await popup_info.value
             
             print("📧 Filling email...")
             await popup.wait_for_load_state("domcontentloaded")
-            await asyncio.sleep(2)
-            
-            # Email Feld finden und füllen
-            email_input = await popup.wait_for_selector("input[type=email]", timeout=30000)
-            await email_input.fill(request.weavy_email)
-            print(f"Email entered: {request.weavy_email}")
-            await asyncio.sleep(1)
-            
-            # Next Button klicken
-            print("Clicking Next button...")
+            await popup.fill("input[type=email]", request.weavy_email)
             await popup.click("#identifierNext")
-            await asyncio.sleep(5)  # Länger warten für Google's Response
-            
-            print("🔑 Waiting for password field...")
-            # Screenshot für Debugging (optional)
-            try:
-                await popup.screenshot(path="/tmp/before-password.png")
-                print("Screenshot saved for debugging")
-            except:
-                pass
             
             print("🔑 Filling password...")
-            
-            # Warte auf verschiedene mögliche Screens
-            print("Checking what page we're on...")
-            page_content = await popup.content()
-            
-            # Check für 2FA/Verification
-            if "verify" in page_content.lower() or "authentication" in page_content.lower():
-                raise Exception("2FA/Verification detected! Please disable 2FA on this account or use an app-specific password.")
-            
-            # Check für CAPTCHA
-            if "captcha" in page_content.lower() or "recaptcha" in page_content.lower():
-                raise Exception("CAPTCHA detected! Browserless may be blocked by Google. Try using a different IP or authentication method.")
-            
-            # Check für "wrong email"
-            if "couldn't find your google account" in page_content.lower() or "couldn't sign you in" in page_content.lower():
-                raise Exception(f"Google account not found or email incorrect: {request.weavy_email}")
-            
-            # Versuche Password-Feld zu finden
-            password_input = await popup.wait_for_selector("input[type=password]", timeout=120000)
-            await password_input.fill(request.weavy_password)
-            print("Password entered")
-            await asyncio.sleep(1)
+            await popup.wait_for_selector("input[type=password]", timeout=120000)
+            await popup.fill("input[type=password]", request.weavy_password)
             await popup.click("#passwordNext")
             await popup.wait_for_event("close", timeout=180000)
             
@@ -123,33 +65,8 @@ async def automate_weavy(request: WeavyRequest):
             await asyncio.sleep(5)
             
             print(f"🔍 Looking for workflow: {request.workflowName}")
-            await page.wait_for_load_state("domcontentloaded")
-            await asyncio.sleep(3)
-            
-            # Suche Workflow mit mehreren Strategien
-            workflow_found = False
-            selectors = [
-                f'text="{request.workflowName}"',
-                f'text={request.workflowName}',
-                f'[title="{request.workflowName}"]',
-                f'button:has-text("{request.workflowName}")',
-                f'a:has-text("{request.workflowName}")'
-            ]
-            
-            for selector in selectors:
-                try:
-                    await page.wait_for_selector(selector, timeout=10000)
-                    await page.click(selector)
-                    workflow_found = True
-                    print(f"Workflow found with selector: {selector}")
-                    break
-                except:
-                    continue
-            
-            if not workflow_found:
-                raise Exception(f"Workflow '{request.workflowName}' not found")
-            
-            await page.wait_for_load_state("domcontentloaded")
+            await page.wait_for_selector(f"text={request.workflowName}", timeout=120000)
+            await page.click(f"text={request.workflowName}")
             await asyncio.sleep(5)
             
             print("🎨 Filling NANO prompts...")
@@ -229,7 +146,7 @@ async def automate_weavy(request: WeavyRequest):
 @app.get("/")
 async def root():
     return {
-        "service": "Weavy Automation (WITH Browserless)",
+        "service": "Weavy Automation (WITHOUT Browserless - Local Browser)",
         "status": "ready",
         "endpoint": "/automate"
     }
